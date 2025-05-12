@@ -5,27 +5,32 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class MariaCtrl : MonoBehaviour
 {
-    [SerializeField]
+    private readonly string horizontal = "Horizontal";
+    private readonly string vertical = "Vertical";
+    private readonly string fire1 = "Fire1";
+    private readonly string mouseX = "Mouse X";
+    private readonly string speedX = "SpeedX";
+    private readonly string speedY = "SpeedY";
+    private readonly string idleJump = "IdleJump_T";
+    private readonly string run = "IsRun_B";
+    private readonly string movingJump = "MovingJump_T";
+    private readonly string attack = "Attack_T";
+
     private Animator anim;
-    public string horizontal = "Horizontal";
-    public string vertical = "Vertical";
-    public string fire1 = "Fire1";
-    public string mouseX = "Mouse X";
-    public string speedX = "SpeedX";
-    public string speedY = "SpeedY";
-    public string idleJump = "IdleJump_T";
-    public string run = "IsRun_B";
-    public string movingJump = "MovingJump_T";
-    private float h = 0f, v = 0f, r = 0f; // 마우스 x 
+    private float h = 0f, v = 0f, r = 0f;  // 마우스 x 
     private Transform tr;
     private float turnSpeed = 300f;
     private float moveSpeed = 5f;
-    
+    private bool isAttacking = false; // 공격중인지 아닌지 판단
+    private AudioSource source;
+    public AudioClip swordClip; // 공격 소리
     
     
 
     void Start()
     {
+        
+        source = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         tr = transform;
     }
@@ -33,15 +38,19 @@ public class MariaCtrl : MonoBehaviour
     
     void Update()
     {
-        h = Input.GetAxis(horizontal);
-        v = Input.GetAxis(vertical);
-        r = Input.GetAxis(mouseX);
-
-        Sprint();
+        if (isAttacking == false)
+        {
+            h = Input.GetAxis(horizontal);
+            v = Input.GetAxis(vertical);
+            r = Input.GetAxis(mouseX);
+            Sprint();
+            PlayerMove();
+        }
         PlayerRotate();
-        PlayerMove();
         IdleJump();
         MovingJump();
+        Attack();
+        
 
         /*tr.Translate(Vector3.right * h * moveSpeed * Time.deltaTime);
         {
@@ -61,6 +70,7 @@ public class MariaCtrl : MonoBehaviour
         {
             moveSpeed = 8f;
             anim.SetBool(run, true);
+            isAttacking = false;
         }
         else
         {
@@ -100,4 +110,27 @@ public class MariaCtrl : MonoBehaviour
         }
     }
 
+    private void Attack()
+    {
+        if (Input.GetButtonDown(fire1) && h == 0f && v == 0f &&  !anim.GetBool(run))
+        {
+                h = 0; v = 0; 
+                isAttacking = true;
+                anim.SetTrigger(attack);
+                moveSpeed = 0f;
+                Invoke("OnAttackEnd", 1.5f); // 1.5초 뒤에 공격이 끝난다
+        }
+        
+        
+       
+    }
+    private void OnAttackEnd()
+    {
+        isAttacking = false; // 공격이 끝날때
+    }
+
+    public void SwordSound()
+    {
+        source.PlayOneShot(swordClip, 1.0f);
+    }
 }
