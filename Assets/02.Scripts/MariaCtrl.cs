@@ -22,6 +22,7 @@ public class MariaCtrl : MonoBehaviour
     private float turnSpeed = 300f;
     private float moveSpeed = 5f;
     private bool isAttacking = false; // 공격중인지 아닌지 판단
+    private bool isSprint = false;
     private AudioSource source;
     public AudioClip swordClip; // 공격 소리
     
@@ -71,11 +72,13 @@ public class MariaCtrl : MonoBehaviour
             moveSpeed = 8f;
             anim.SetBool(run, true);
             isAttacking = false;
+            isSprint = true;
         }
         else
         {
             moveSpeed = 5f;
             anim.SetBool(run, false);
+            isSprint = false;
         }
     }
 
@@ -112,6 +115,7 @@ public class MariaCtrl : MonoBehaviour
 
     private void Attack()
     {
+        if (isSprint) return;
         if (Input.GetButtonDown(fire1) && h == 0f && v == 0f &&  !anim.GetBool(run))
         {
                 h = 0; v = 0; 
