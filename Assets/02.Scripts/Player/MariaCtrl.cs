@@ -16,6 +16,7 @@ public class MariaCtrl : MonoBehaviour
     private readonly string run = "IsRun_B";
     private readonly string movingJump = "MovingJump_T";
     private readonly string attack = "Attack_T";
+    private readonly string shield = "Shield_B";
     [SerializeField] private Transform cameraPivot;
     
 
@@ -27,6 +28,7 @@ public class MariaCtrl : MonoBehaviour
     private bool isJumping;
     private bool isAttacking = false; // 공격중인지 아닌지 판단
     private bool isSprint = false;
+    private bool isShielding = false;
     private Rigidbody rb;
     private AudioSource source;
     public AudioClip swordClip; // 공격 소리
@@ -40,9 +42,9 @@ public class MariaCtrl : MonoBehaviour
     public float yRot = 0f; public float xRot = 0f;
 
 
-    void Start()
+    IEnumerator Start()
     {
-        
+        yield return new WaitForSeconds(0.1f); // 0.1초 대기
         source = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         tr = transform;
@@ -56,21 +58,25 @@ public class MariaCtrl : MonoBehaviour
     
     void Update()
     {
-        if (isAttacking == false)
+        if (tr == null) return; // Transform이 null이면 리턴
+        Shield();
+        r = Input.GetAxis(mouseX);
+
+        if (!isAttacking)
         {
             h = Input.GetAxis(horizontal);
             v = Input.GetAxis(vertical);
-            r = Input.GetAxis(mouseX);
             Sprint();
             PlayerMove();
             IdleJump();
         }
+
         PlayerRotate();
-        
         MovingJump();
         Attack();
         PlayerRotateY();
         CursorLockUnLock();
+
 
         /*tr.Translate(Vector3.right * h * moveSpeed * Time.deltaTime);
         {
@@ -82,6 +88,23 @@ public class MariaCtrl : MonoBehaviour
         }
         */
 
+    }
+
+    private void Shield()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            
+            isShielding = true;
+            anim.SetBool(shield, true);
+            
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            isShielding = false;
+            anim.SetBool(shield, false);
+            
+        }
     }
 
     private static void CursorLockUnLock()
@@ -108,12 +131,20 @@ public class MariaCtrl : MonoBehaviour
 
     private void Sprint()
     {
+        if(isShielding)
+        {
+            moveSpeed = 3f;
+            anim.SetBool(run, false);
+            isSprint = false;
+            return;
+        }
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
         {
             moveSpeed = 8f;
             anim.SetBool(run, true);
-            isAttacking = false;
             isSprint = true;
+            isAttacking = false;
+            
         }
         else
         {
@@ -122,7 +153,7 @@ public class MariaCtrl : MonoBehaviour
             isSprint = false;
         }
     }
-
+    
     private void PlayerRotate()
     {
         tr.Rotate(Vector3.up * r * turnSpeed * Time.deltaTime); // tr.Rotate(0,y,0);
