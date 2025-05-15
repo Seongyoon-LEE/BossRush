@@ -24,7 +24,6 @@ public class MariaCtrl : MonoBehaviour
     private Transform tr;
     private float turnSpeed = 300f;
     private float moveSpeed = 5f;
-    public float jumpPower = 3f;
     private bool isJumping;
     private bool isAttacking = false; // 공격중인지 아닌지 판단
     private bool isSprint = false;
@@ -64,9 +63,10 @@ public class MariaCtrl : MonoBehaviour
             r = Input.GetAxis(mouseX);
             Sprint();
             PlayerMove();
+            IdleJump();
         }
         PlayerRotate();
-        IdleJump();
+        
         MovingJump();
         Attack();
         PlayerRotateY();
@@ -143,22 +143,33 @@ public class MariaCtrl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && h == 0 && v == 0 ) // idle jump
         {
             if (isJumping) return;
+            
             isJumping = true;
             anim.SetTrigger(idleJump);
-            rb.velocity = Vector3.up * jumpPower;
+            rb.velocity = Vector3.up * 3f;
         }
     }
     
     private void MovingJump()
     {
+        if(isJumping) return;
         if (Input.GetKeyDown(KeyCode.Space) && v > 0.1f) // moving jump
         {
+            isJumping = true;
             anim.SetTrigger(movingJump);
+            rb.velocity = Vector3.up * 5f;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.Space) && v > 0.1f) // moving jump
+        {
+            isJumping = true;
+            anim.SetTrigger(movingJump);
+            rb.velocity = Vector3.up * 7f;
         }
     }
 
     private void Attack()
     {
+        
         if (isSprint) return;
         if (Input.GetButtonDown(fire1) && h == 0f && v == 0f &&  !anim.GetBool(run))
         {
