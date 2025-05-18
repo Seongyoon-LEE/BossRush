@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class MariaCtrl : MonoBehaviour
 {
+    public static bool DisableControl = false;
+
     private readonly string horizontal = "Horizontal";
     private readonly string vertical = "Vertical";
     private readonly string fire1 = "Fire1";
@@ -59,6 +61,8 @@ public class MariaCtrl : MonoBehaviour
     void Update()
     {
         if (tr == null) return; // Transform이 null이면 리턴
+        if(DisableControl) return; // DisableControl이 true이면 리턴
+
         Shield();
         r = Input.GetAxis(mouseX);
 
@@ -133,7 +137,7 @@ public class MariaCtrl : MonoBehaviour
     {
         if(isShielding)
         {
-            moveSpeed = 3f;
+            moveSpeed = 2f;
             anim.SetBool(run, false);
             isSprint = false;
             return;
