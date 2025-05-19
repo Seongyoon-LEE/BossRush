@@ -24,14 +24,11 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(string[] lines)
     {
-        Debug.Log("StartDialogue 실행됨! lines 길이: " + lines.Length);
-
         dialogueQueue.Clear();
 
         foreach (var line in lines)
         {
             dialogueQueue.Enqueue(line);
-            Debug.Log("큐에 추가된 대사: " + line);
         }
         dialoguePanel.SetActive(true); // 패널 열기 
         isDialogueActive = true; // 대화가 활성화됨
@@ -54,7 +51,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         string line = dialogueQueue.Dequeue();
-        Debug.Log("대사 출력: " + line); // ? 추가해봐!!
+       
 
         if (line.Contains("[퀘스트 수락]"))
         {
@@ -120,7 +117,6 @@ public class DialogueManager : MonoBehaviour
     {
         EndDialogue();
         // 퀘스트 거절 후 처리 (예: 대화 종료)
-        Debug.Log("퀘스트 거절됨");
     }
 
 }
