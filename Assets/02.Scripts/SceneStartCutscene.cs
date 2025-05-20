@@ -15,7 +15,7 @@ public class SceneStartCutscene : MonoBehaviour
 
         if (player != null)
         {
-            var playerCtrl = player.GetComponent<MariaCtrl>();
+            var playerCtrl = player.GetComponent<PlayerCtrl>();
             if (playerCtrl != null)
                 playerCtrl.enabled = false;
         }
@@ -31,8 +31,8 @@ public class SceneStartCutscene : MonoBehaviour
     {
         Debug.Log("¢∫ StartBattle() »£√‚µ !");
 
-        if (player != null && player.GetComponent<MariaCtrl>() != null)
-            player.GetComponent<MariaCtrl>().enabled = true;
+        if (player != null && player.GetComponent<PlayerCtrl>() != null)
+            player.GetComponent<PlayerCtrl>().enabled = true;
             
         if (boss != null && boss.GetComponent<EnermyCtrl>() != null)
             boss.GetComponent<EnermyCtrl>().enabled = true;

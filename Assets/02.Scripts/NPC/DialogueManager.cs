@@ -33,7 +33,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(true); // 패널 열기 
         isDialogueActive = true; // 대화가 활성화됨
         Time.timeScale = 0; // 게임 일시 정지
-        MariaCtrl.DisableControl = true;
+        PlayerCtrl.DisableControl = true;
         Cursor.lockState = CursorLockMode.None; // 마우스 커서 잠금 해제
         Cursor.visible = true; // 마우스 커서 보이기
 
@@ -96,7 +96,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         isDialogueActive = false; // 대화가 비활성화됨
         Time.timeScale = 1; // 게임 재개
-        MariaCtrl.DisableControl = false;
+        PlayerCtrl.DisableControl = false;
 
         Cursor.lockState = CursorLockMode.Locked; // 마우스 커서 잠금
         Cursor.visible = false; // 마우스 커서 숨기기
