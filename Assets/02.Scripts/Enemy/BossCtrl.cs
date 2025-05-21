@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-public class EnermyCtrl : MonoBehaviour
+public class BossCtrl : MonoBehaviour
 {
     [SerializeField] private Transform playerTr;
-    [SerializeField] private Transform skeletonTr;
+    [SerializeField] private Transform tr;
     [SerializeField] private NavMeshAgent navi;
     [SerializeField] private Animator animator;
     public float attackDist = 3.0f;
@@ -18,7 +17,7 @@ public class EnermyCtrl : MonoBehaviour
     void Start()
     {
         playerTr = GameObject.FindWithTag("Player").transform;
-        skeletonTr = GetComponent<Transform>();
+        tr = GetComponent<Transform>();
         navi = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
@@ -31,27 +30,27 @@ public class EnermyCtrl : MonoBehaviour
 
     //        Debug.Log("Attack : " + curHealth);
     //    }
-            
+
     //}
 
     void Update()
     {
-        float dist = Vector3.Distance(skeletonTr.position,playerTr.position);
-        if(dist <= attackDist)
+        float dist = Vector3.Distance(tr.position, playerTr.position);
+        if (dist <= attackDist)
         {
-            animator.SetBool("IsAttack_B", true);
+            animator.SetBool("isAttack", true);
             navi.isStopped = true;
         }
-        else if(dist <= traceDist)
+        else if (dist <= traceDist)
         {
-            animator.SetBool("IsAttack_B", false);
-            animator.SetBool("IsTrace_B", true);
+            animator.SetBool("isAttack", false);
+            animator.SetBool("isWalk", true);
             navi.isStopped = false;
             navi.destination = playerTr.position;
         }
         else
         {
-            animator.SetBool("IsTrace_B", false);
+            animator.SetBool("isWalk", false);
             navi.isStopped = true;
         }
     }
