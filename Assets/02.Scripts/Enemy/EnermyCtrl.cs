@@ -12,10 +12,12 @@ public class EnermyCtrl : MonoBehaviour
     [SerializeField] private Animator animator;
     public float attackDist = 3.0f;
     public float traceDist = 20.0f;
+    public Collider weaponCollider;
 
     public int maxHealth;
     public int curHealth;
 
+   
     void Start()
     {
         playerTr = GameObject.FindWithTag("Player").transform;
@@ -56,8 +58,25 @@ public class EnermyCtrl : MonoBehaviour
             navi.isStopped = true;
         }
     }
-    void CallEventHandle()
+    private void OnTriggerEnter(Collider other)
     {
-
+        if(weaponCollider.enabled && other.CompareTag("Player"))
+        {
+            Debug.Log("보스의 무기 공격 성공!");
+            other.GetComponent<PlayerCtrl>().OnHit();
+        }
     }
+
+    public void EnableWeapon()
+    {
+        weaponCollider.enabled = true;
+        Debug.Log("무기활성화");
+    }
+    public void DisableWeapon()
+    {
+        weaponCollider.enabled = false;
+        Debug.Log("무기비활성화");
+    }
+
+
 }

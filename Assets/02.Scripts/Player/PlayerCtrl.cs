@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -12,6 +13,7 @@ public class PlayerCtrl : MonoBehaviour
     private bool isLockingOn = false;
     public static bool DisableControl = false;
     private bool isInvincible = false; // 무적 여부
+    private bool isHitRecently = false; // 최근 피격 여부
 
     [Header("Lock-on-UI")]
     public GameObject lockOnUI; // UI 오브젝트 (Image)
@@ -255,10 +257,11 @@ public class PlayerCtrl : MonoBehaviour
 
     public void OnHit()
     {
-        if(isInvincible)  // 무적일때 피격 무시
-        { Debug.Log("무적상태,피격무시");
-            return;
-        }
+        if (isInvincible || isHitRecently) return; // 무적이거나 최근 피격이면 무시
+
+        isHitRecently = true; // 피격 상태로 변경
+        Debug.Log("보스의 무기 공격 성공! isHitRecently)");
+
         if (isParrying)
         {
             Debug.Log("패링 성공!");
@@ -268,7 +271,13 @@ public class PlayerCtrl : MonoBehaviour
 
         currentState = PlayerState.Stagger;
         anim.SetTrigger(hashStagger);
+
         Invoke(nameof(RecoverFromStagger), 1f);
+        Invoke(nameof(ResetHitState), 0.5f);
+    }
+    void ResetHitState()
+    {
+        isHitRecently = false; // 피격 상태 해제
     }
 
     void RecoverFromStagger()
