@@ -14,6 +14,7 @@ public class BossCtrl : MonoBehaviour
 
     public int maxHealth;
     public int curHealth;
+
     void Start()
     {
         playerTr = GameObject.FindWithTag("Player").transform;

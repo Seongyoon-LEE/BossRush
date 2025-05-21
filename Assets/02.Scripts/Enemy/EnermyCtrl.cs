@@ -15,13 +15,14 @@ public class EnermyCtrl : MonoBehaviour
 
     public int maxHealth;
     public int curHealth;
+
     void Start()
     {
         playerTr = GameObject.FindWithTag("Player").transform;
         skeletonTr = GetComponent<Transform>();
         navi = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-    }
+}
     //private void OnTriggerEnter(Collider other)
     //{
     //    if(other.tag == "Player")
@@ -54,5 +55,9 @@ public class EnermyCtrl : MonoBehaviour
             animator.SetBool("IsTrace_B", false);
             navi.isStopped = true;
         }
+    }
+    void CallEventHandle()
+    {
+
     }
 }
