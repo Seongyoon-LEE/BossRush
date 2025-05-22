@@ -17,7 +17,11 @@ public class EnermyCtrl : MonoBehaviour
     private bool isSkillAnimating = false;
     public float skillCooldown = 3f; // 스킬 쿨다운 시간
     private float lastSkillTime = -Mathf.Infinity; // 마지막 스킬 사용 시간
-   
+
+    [Header("체력 시스템")]
+    public float maxHealth = 150f; // 최대 체력
+    private float curHealth; // 현재 체력
+
     void Start()
     {
         tr = GetComponent<Transform>();
@@ -25,22 +29,61 @@ public class EnermyCtrl : MonoBehaviour
         playerTr = GameObject.FindWithTag("Player").transform;
         navi = GetComponent<NavMeshAgent>();
 
+        curHealth = maxHealth; // 현재 체력을 최대 체력으로 초기화
+
         if (animator == null) Debug.LogError("Animator is not assigned!");
         if (tr == null) Debug.LogError("Transform (tr) is not assigned!");
         if (playerTr == null) Debug.LogError("Player Transform (playerTr) is not assigned!");
         if (navi == null) Debug.LogError("NavMeshAgent (navi) is not assigned!");
+
+        weaponCollider.enabled = false; // 처음에는 무기 콜라이더 비활성화
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(other.tag == "Player")
-    //    {
-    //        PlayerCtrl playerCtrl = other.GetComponent<PlayerCtrl>();
-    //        curHealth -= playerCtrl.damage;
 
-    //        Debug.Log("Attack : " + curHealth);
-    //    }
+    public void TakeDamage(float damage)
+    {
+        curHealth -= damage; // 체력 감소
+        Debug.Log($"적 피격! 현재 체력: {curHealth}");
 
-    //}
+        if (curHealth <= 0)
+        {
+            Die(); // 죽음 처리
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (weaponCollider.enabled && other.CompareTag("Player"))
+        {
+            if (!weaponCollider.enabled) return; // 무기 콜라이더가 비활성화된 경우 무시
+
+            PlayerCtrl player = other.GetComponent<PlayerCtrl>();
+            if (player != null)
+            {
+                player.TakeDamage(30); // 플레이어에게 피해를 줌
+            }
+            other.GetComponent<PlayerCtrl>().OnHit();
+        }
+    }
+
+    private void Die()
+    {
+        animator.SetTrigger("Die");
+        navi.isStopped = true; // 죽으면 이동 정지
+        this.enabled = false; // 스크립트 비활성화
+        Debug.Log("적이 죽었습니다!");
+        // 추가적인 죽음 처리 로직 (예: 오브젝트 비활성화, 애니메이션 종료 후 삭제 등)
+    }
+
+    public void DisableWeapon()
+    {
+        weaponCollider.enabled = false;
+
+    }
+
+    public void EnableWeapon()
+    {
+        weaponCollider.enabled = true;
+
+    }
     public void SkillAni()
     {
         if (animator != null && !isSkillAnimating)
@@ -88,30 +131,10 @@ public class EnermyCtrl : MonoBehaviour
             isSkillAnimating = false; // 기본 상태에서는 스킬 애니메이션 중지 간주
         }
     }
+    
     public void OnSkillAnimationEnd()
     {
         isSkillAnimating = false;
         Debug.Log("Skill Animation Ended");
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(weaponCollider.enabled && other.CompareTag("Player"))
-        {
-            Debug.Log("보스의 무기 공격 성공!");
-            other.GetComponent<PlayerCtrl>().OnHit();
-        }
-    }
-
-    public void EnableWeapon()
-    {
-        weaponCollider.enabled = true;
-        Debug.Log("무기활성화");
-    }
-    public void DisableWeapon()
-    {
-        weaponCollider.enabled = false;
-        Debug.Log("무기비활성화");
-    }
-
-
 }

@@ -7,6 +7,11 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(Animator))]
 public class PlayerCtrl : MonoBehaviour
 {
+    [Header("체력 시스템")]
+    public float maxHealth = 100f; // 최대 체력
+    private float curHealth; // 현재 체력
+    [SerializeField] private Collider playerWeaponCollider; // 무기 콜라이더
+
     [Header("Lock-on")]
     public Transform lockOnTarget;
     public Transform lockPoint; // 락온 타겟의 위치
@@ -81,6 +86,8 @@ public class PlayerCtrl : MonoBehaviour
         tr = transform;
         rb = GetComponent<Rigidbody>();
 
+        curHealth = maxHealth; // 현재 체력을 최대 체력으로 초기화
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -100,6 +107,57 @@ public class PlayerCtrl : MonoBehaviour
         PlayerRotateY();
         CursorLockUnLock();
         Move();
+    }
+
+    public void PlayerEnableWeapon()
+    {
+        playerWeaponCollider.enabled = true; // 무기 콜라이더 활성화
+        Debug.Log("플레이어 무기 활성화");
+    }
+
+    public void PlayerDisableWeapon()
+    {
+        playerWeaponCollider.enabled = false; // 무기 콜라이더 비활성화
+        Debug.Log("플레이어 무기 비활성화");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!playerWeaponCollider.enabled) return; // 무기 콜라이더가 비활성화된 경우 무시
+        if (currentState != PlayerState.Attack) return; // 공격 상태 아닐때 리턴
+
+        if (other.CompareTag("Boss"))
+        {
+            EnermyCtrl enemy = other.GetComponent<EnermyCtrl>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(25f); // 플레이어 공격 데미지
+            }
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (isInvincible || isHitRecently) return;
+        {
+            curHealth -= damage;
+            Debug.Log($"플레이어 피격 ! 현재 체력 : {curHealth}");
+            
+            if(curHealth <= 0)
+            {
+                Die();
+                return;
+            }
+                OnHit();            
+        }
+    }
+
+    private void Die()
+    {
+        currentState = PlayerState.Dead;
+        anim.SetTrigger("Die_T"); // Die 애니메이션 필요
+        DisableControl = true;
+        Debug.Log("플레이어 사망");
     }
 
     private void LockOnUI()
@@ -260,8 +318,7 @@ public class PlayerCtrl : MonoBehaviour
         if (isInvincible || isHitRecently) return; // 무적이거나 최근 피격이면 무시
 
         isHitRecently = true; // 피격 상태로 변경
-        Debug.Log("보스의 무기 공격 성공! isHitRecently)");
-
+        
         if (isParrying)
         {
             Debug.Log("패링 성공!");
