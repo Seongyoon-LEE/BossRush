@@ -84,14 +84,7 @@ public class PlayerCtrl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "BossWeapon")
-        {
-            GameManager.instance.PlayerHit(30);
-            Debug.Log("플레이어 체력 -30");
-        }
-    }
+    
     void Update()
     {
         if (tr == null || DisableControl || currentState == PlayerState.Dead) return;
