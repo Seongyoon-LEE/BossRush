@@ -123,16 +123,17 @@ public class PlayerCtrl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!playerWeaponCollider.enabled) return; // 무기 콜라이더가 비활성화된 경우 무시
-        if (currentState != PlayerState.Attack) return; // 공격 상태 아닐때 리턴
+        if (!playerWeaponCollider.enabled) return;
+        if (currentState != PlayerState.Attack) return;
 
-        if (other.CompareTag("Boss"))
+        EnermyCtrl enemy = other.GetComponent<EnermyCtrl>();
+        if (enemy == null)
+            enemy = other.GetComponentInParent<EnermyCtrl>();
+
+        if (enemy != null)
         {
-            EnermyCtrl enemy = other.GetComponent<EnermyCtrl>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(25f); // 플레이어 공격 데미지
-            }
+            Debug.Log($"{other.name}에게 무기 명중!");
+            enemy.TakeDamage(25f);
         }
     }
 
