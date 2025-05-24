@@ -19,6 +19,8 @@ public class PlayerCtrl : MonoBehaviour
     public static bool DisableControl = false;
     private bool isInvincible = false; // 무적 여부
     private bool isHitRecently = false; // 최근 피격 여부
+    private Vector3 dashVelocity = Vector3.zero; // 대쉬 속도 저장용
+
 
     [Header("Lock-on-UI")]
     public GameObject lockOnUI; // UI 오브젝트 (Image)
@@ -108,7 +110,13 @@ public class PlayerCtrl : MonoBehaviour
         CursorLockUnLock();
         Move();
     }
-
+    private void FixedUpdate()
+    {
+        if(currentState == PlayerState.Dash)
+        {
+            rb.velocity = dashVelocity; // 대쉬 속도 적용
+        }
+    }
     public void PlayerEnableWeapon()
     {
         playerWeaponCollider.enabled = true; // 무기 콜라이더 활성화
@@ -211,30 +219,39 @@ public class PlayerCtrl : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
-            TryDash();
+            float hInput = Input.GetAxisRaw("Horizontal");
+            float vInput = Input.GetAxisRaw("Vertical");
+
+            if (Mathf.Abs(hInput) > 0.1f || Mathf.Abs(vInput) > 0.1f)
+            {
+                TryDash(hInput, vInput); // 방향을 직접 넘겨주자!
+            }
+            else
+            {
+                // 방향 입력 없으면 바라보는 방향으로 대쉬
+                TryDash(0f, 0f);
+            }
         }
 
         if(Input.GetMouseButtonDown(2))
         {
-            if (lockOnTarget != null)
-            {
-                isLockingOn = !isLockingOn;
-            }
-            else
-            {
-                isLockingOn = false; // 타겟(보스)가 없다면 무조건 해제
-            }
+            isLockingOn = lockOnTarget != null && !isLockingOn;
         }
     }
 
-    void TryDash()
+    void TryDash(float hInput, float vInput)
     {
-        if (currentState == PlayerState.Attack || currentState == PlayerState.Parry || currentState == PlayerState.Dash || currentState == PlayerState.Stagger) return;
-
+        if (currentState == PlayerState.Attack || currentState == PlayerState.Parry || currentState == PlayerState.Dash || currentState == PlayerState.Stagger)
+        {
+            Debug.Log("? Dash 상태 불가 → 현재 상태: " + currentState);
+            return;
+        }  
+        Debug.Log("? TryDash 실행됨");
         isInvincible = true; // 대쉬 시작시 무적
         currentState = PlayerState.Dash;
         anim.SetTrigger(hashDash);
 
+        Debug.Log($"▶ Dash 입력: h = {hInput}, v = {vInput}");
         // 이동 방향 계산
         Vector3 camForward = cameraPivot.forward;
         Vector3 camRight = cameraPivot.right;
@@ -242,27 +259,34 @@ public class PlayerCtrl : MonoBehaviour
         camRight.y = 0f;
         camForward.Normalize();
         camRight.Normalize();
-
-        Vector3 moveDir = (camForward * v + camRight * h).normalized;
-
+        Debug.Log($"▶ 카메라 방향: forward = {camForward}, right = {camRight}");
+        Vector3 moveDir = (camForward * vInput + camRight * hInput).normalized;
+        Debug.Log($"▶ 계산된 moveDir = {moveDir}");
         if (moveDir.magnitude == 0)
+        {
             moveDir = tr.forward; // 입력 없으면 바라보는 방향으로
-
+            Debug.Log($"▶ moveDir이 0이므로 tr.forward로 대체 = {moveDir}");
+        }
         float dashForce = 8f;
-        rb.velocity = moveDir * dashForce;
-
+        dashVelocity = moveDir * dashForce;
+        Debug.Log($"▶ rb.velocity 적용 = {rb.velocity}");
         // 일정 시간 후 상태 복구 (애니메이 길이와 맞춰야함)
         Invoke(nameof(EndDash), 0.6f); // <- Dash 애니 길이 기준으로 조정
     }
     void EndDash()
     {
         isInvincible = false; // 대쉬 종료시 무적 해제
+        rb.velocity = Vector3.zero; // 대쉬 후 속도 초기화
+        dashVelocity = Vector3.zero; // 대쉬 속도 초기화
+
         if (currentState == PlayerState.Dash)
             currentState = PlayerState.Idle;
     }
     void Move()
     {
-        
+        if (currentState == PlayerState.Dash || currentState == PlayerState.Stagger || currentState == PlayerState.Attack)
+            return;
+
         Vector3 dir = new Vector3(h, 0, v).normalized;
 
         if (dir.magnitude > 0.1f)
@@ -382,13 +406,13 @@ public class PlayerCtrl : MonoBehaviour
 
     private void IdleJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && h == 0 && v == 0)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (currentState == PlayerState.Jump) return;
 
             currentState = PlayerState.Jump;
             anim.SetTrigger(idleJump);
-            rb.velocity = Vector3.up * 3f;
+            rb.velocity = Vector3.up * 5f;
         }
     }
 

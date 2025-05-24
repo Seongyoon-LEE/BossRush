@@ -1,0 +1,184 @@
+fileFormatVersion: 2
+guid: b37a4da97309e7249870e02be7309ede
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Giant Leafy
+    second: {fileID: 2100000, guid: 98f0bcd2422218846bc1d3cc11519828, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Giant Leafy
+    second: {fileID: 2800000, guid: 005d38b654ec9fb4bbbdee6d0f872e18, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: Giant Leafy(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leaf
+      parentName: Giant Leafy(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature
+      parentName: Giant Leafy(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 100, y: 100, z: 100}
+    - name: Bone.001
+      parentName: Armature
+      position: {x: -0, y: 0, z: -0.00040661276}
+      rotation: {x: 0.7071068, y: -0.00000008429372, z: -0.0000000842937, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Bone.002
+      parentName: Bone.001
+      position: {x: -0, y: 0.0026966012, z: 0}
+      rotation: {x: 0.19264163, y: 0.00000023395275, z: -1.2818085e-14, w: 0.9812692}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Bone.003
+      parentName: Bone.002
+      position: {x: -5.3290704e-17, y: 0.007835834, z: -2.2351741e-10}
+      rotation: {x: -0.42135566, y: 0.0030404034, z: 0.0028021634, w: 0.9068861}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: Bone.004
+      parentName: Bone.003
+      position: {x: -2.6193446e-12, y: 0.004231819, z: -3.4257366e-10}
+      rotation: {x: 0.0060409606, y: 0.009987936, z: 0.0062318956, w: 0.9999125}
+      scale: {x: 0.99999994, y: 1, z: 1.0000001}
+    - name: Bone.005
+      parentName: Bone.004
+      position: {x: -4.6566128e-12, y: 0.005151837, z: 7.3051387e-10}
+      rotation: {x: -0.12699425, y: 0.12673418, z: 0.67763656, w: 0.7131757}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Bone.006
+      parentName: Bone.005
+      position: {x: 8.381903e-11, y: 0.004471187, z: 0.0000000016485819}
+      rotation: {x: -0.035180453, y: 0.009985364, z: 0.0039064814, w: 0.9993234}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Bone.007
+      parentName: Bone.006
+      position: {x: -3.7252902e-11, y: 0.0044993674, z: -2.8701833e-10}
+      rotation: {x: -0.09105595, y: -0.0011105753, z: -0.08046298, w: 0.99258924}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Bone.008
+      parentName: Bone.007
+      position: {x: -3.7252902e-11, y: 0.0037542372, z: -1.6967533e-10}
+      rotation: {x: 0.054361556, y: 0.010583732, z: -0.05142098, w: 0.9971403}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Bone.009
+      parentName: Armature
+      position: {x: -0, y: 0, z: -0.00040661276}
+      rotation: {x: 0.00000040665313, y: -0.67896163, z: 0.7341738, w: -0.00000037625043}
+      scale: {x: 1, y: 0.9999998, z: 0.99999994}
+    - name: Bone.010
+      parentName: Bone.009
+      position: {x: 6.6180186e-18, y: 0.0043810965, z: -1.16415315e-11}
+      rotation: {x: 0.10098252, y: -5.777345e-14, z: -0.00000011155237, w: 0.99488825}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
